@@ -1,0 +1,70 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.24'
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Wails
+        run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
+
+      - name: Install frontend dependencies
+        run: npm install
+        working-directory: frontend
+
+      - name: Build
+        run: wails build -platform windows/amd64 -ldflags "-s -w -X main.Version=${{ github.ref_name }}"
+
+      - name: Install UPX
+        run: choco install upx -y
+
+      - name: Compress with UPX
+        run: upx --best --lzma build/bin/fs-mod-sync.exe
+
+      - name: Generate changelog
+        id: changelog
+        run: |
+          $previous_tag = git describe --tags --abbrev=0 HEAD^ 2>$null
+          if ($LASTEXITCODE -ne 0) {
+            $commits = git log --pretty=format:"- %s (%h)" ${{ github.ref_name }}
+          } else {
+            $commits = git log --pretty=format:"- %s (%h)" "$previous_tag..${{ github.ref_name }}"
+          }
+          $commits = $commits -replace '"', '\"'
+          $commits = $commits -replace "`r`n", "`n"
+          "CHANGELOG<<EOF" >> $env:GITHUB_OUTPUT
+          $commits >> $env:GITHUB_OUTPUT
+          "EOF" >> $env:GITHUB_OUTPUT
+        shell: pwsh
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: build/bin/fs-mod-sync.exe
+          body: |
+            ## Changes
+            ${{ steps.changelog.outputs.CHANGELOG }}
+          draft: false
+          prerelease: false

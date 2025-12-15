@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>FS Mod Sync</title>
+    <link rel="stylesheet" href="./src/style.css"/>
+</head>
+<body>
+    <!-- Custom Context Menu -->
+    <div id="context-menu" class="context-menu">
+        <div class="context-menu-item" id="ctx-copy">Copy</div>
+        <div class="context-menu-item" id="ctx-paste">Paste</div>
+    </div>
+
+    <div id="app">
+        <header>
+            <h1>FS Mod Sync</h1>
+            <p class="subtitle">Sync mods from your Farming Simulator server</p>
+        </header>
+
+        <main>
+            <!-- Setup Screen -->
+            <section id="setup-screen" class="screen active">
+                <div class="card">
+                    <h2>Step 1: Enable Public Mod Download</h2>
+                    <div class="instructions">
+                        <p>Before using this tool, you need to enable <strong>Public Mod Download</strong> on your Farming Simulator dedicated server control panel.</p>
+                        <ol>
+                            <li>Log in to your server control panel</li>
+                            <li>Navigate to the <strong>Settings</strong> tab</li>
+                            <li>Enable "Public Mod Download"</li>
+                            <li>Copy the mods link shown below it (looks like: <code>http://IP:PORT/mods.html</code>)</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Step 2: Enter Server URL</h2>
+                    <div class="input-group">
+                        <label for="server-url">Mods Page URL:</label>
+                        <input type="text" id="server-url" placeholder="http://IP:PORT/mods.html" />
+                    </div>
+                    <button id="validate-btn" class="btn primary">Validate & Continue</button>
+                    <div id="validation-error" class="error hidden"></div>
+                </div>
+            </section>
+
+            <!-- Directory Screen -->
+            <section id="directory-screen" class="screen hidden">
+                <div class="card">
+                    <h2>Retrieved modlist successfully.</h2>
+                    <div class="info-row">
+                        <span class="label">Game Version:</span>
+                        <span id="game-version" class="value badge">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Downloadable Mods:</span>
+                        <span id="mod-count" class="value">-</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Select Mods Directory</h2>
+                    <div class="input-group">
+                        <label for="mods-dir">Mods Folder:</label>
+                        <div class="input-with-button">
+                            <input type="text" id="mods-dir" placeholder="Select your mods folder..." readonly />
+                            <button id="browse-btn" class="btn secondary">Browse</button>
+                        </div>
+                    </div>
+                    <button id="scan-btn" class="btn primary">Scan & Compare Mods</button>
+                </div>
+            </section>
+
+            <!-- Summary Screen -->
+            <section id="summary-screen" class="screen hidden">
+                <div class="card">
+                    <h2>Sync Summary</h2>
+                    <div class="summary-stats">
+                        <div class="stat">
+                            <span class="stat-value" id="total-mods">0</span>
+                            <span class="stat-label">Total Mods</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value" id="mods-to-sync">0</span>
+                            <span class="stat-label">To Download</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value" id="total-size">0 MB</span>
+                            <span class="stat-label">Total Size</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Mods to Download</h2>
+                    <div id="mods-list" class="mods-list">
+                        <p class="empty-message">All mods are up to date!</p>
+                    </div>
+                </div>
+
+                <div class="button-row">
+                    <button id="back-btn" class="btn secondary">Back</button>
+                    <button id="sync-btn" class="btn primary">Start Sync</button>
+                    <button id="summary-close-btn" class="btn secondary">Close</button>
+                </div>
+            </section>
+
+            <!-- Progress Screen -->
+            <section id="progress-screen" class="screen hidden">
+                <div class="card">
+                    <h2>Downloading Mods</h2>
+                    <div class="progress-info">
+                        <span id="progress-status">Preparing...</span>
+                        <span id="progress-count">0 / 0</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div id="progress-fill" class="progress-fill"></div>
+                    </div>
+                    <div class="progress-details">
+                        <span id="current-file">-</span>
+                        <span id="download-speed">-</span>
+                    </div>
+                    <button id="cancel-btn" class="btn danger">Cancel</button>
+                </div>
+            </section>
+
+            <!-- Complete Screen -->
+            <section id="complete-screen" class="screen hidden">
+                <div class="card success-card">
+                    <div class="success-icon">&#10003;</div>
+                    <h2>Sync Complete!</h2>
+                    <p id="complete-message">All mods have been downloaded successfully.</p>
+                    <div class="button-row">
+                        <button id="close-btn" class="btn primary">Close</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer id="app-footer">
+            <span id="version-info">Loading...</span>
+            <span class="separator">|</span>
+            <a id="github-link" href="#" target="_blank">GitHub</a>
+        </footer>
+    </div>
+    <script src="./src/main.js" type="module"></script>
+</body>
+</html>
