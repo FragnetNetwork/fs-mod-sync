@@ -7,7 +7,14 @@
   "frontend:dev:watcher": "npm run dev",
   "frontend:dev:serverUrl": "auto",
   "author": {
-    "name": "Ioannis Karamperis",
-    "email": "40238062+revij@users.noreply.github.com"
+    "name": "Fragnet Networks",
+    "email": "support@fragnet.net"
+  },
+  "info": {
+    "companyName": "Fragnet Networks",
+    "productName": "Farming Simulator Mod Sync",
+    "productVersion": "0.0.0",
+    "copyright": "Fragnet Networks International AB",
+    "comments": "Synchronize mods from Farming Simulator dedicated servers"
   }
 }

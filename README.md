@@ -29,6 +29,14 @@ Get the latest release from the [Releases](https://github.com/FragnetNetwork/fs-
 
 > **Note:** This application is not code-signed. Windows SmartScreen may show a warning when you first run it. Click "More info" then "Run anyway" to proceed.
 
+## Screenshots
+
+<p align="center">
+  <img src="screenshots/fs-mod-sync-1.png" width="400" alt="Server URL Entry">
+  <img src="screenshots/fs-mod-sync-2.png" width="400" alt="Directory Selection">
+  <img src="screenshots/fs-mod-sync-3.png" width="400" alt="Sync Progress">
+</p>
+
 ## Building from Source
 
 Requires Go 1.24+ and Node.js 18+.

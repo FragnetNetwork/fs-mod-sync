@@ -34,6 +34,18 @@ jobs:
         run: npm install
         working-directory: frontend
 
+      - name: Get version
+        id: version
+        run: echo "VERSION=${GITHUB_REF_NAME#v}" >> $GITHUB_OUTPUT
+        shell: bash
+
+      - name: Update version in wails.json
+        run: |
+          $content = Get-Content wails.json -Raw
+          $content = $content -replace '"productVersion": "0.0.0"', '"productVersion": "${{ steps.version.outputs.VERSION }}"'
+          Set-Content wails.json $content
+        shell: pwsh
+
       - name: Build
         run: wails build -platform windows/amd64 -ldflags "-s -w -X main.Version=${{ github.ref_name }}"
 
